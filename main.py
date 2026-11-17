@@ -1,5 +1,6 @@
 import spacy
 from spacy.matcher import Matcher
+import json
 
 print("Cargando modelo de IA...")
 npl = spacy.load("es_core_news_sm")
@@ -45,8 +46,9 @@ for match_id, start, end in resultados:
         tarea_estructurada["horas"].append(palabra)
 
 
+# extraer archivo JSON
+with open("tarea_estructurada.json", "w", encoding="utf-8") as archivo_json:
+    json.dump(tarea_estructurada, archivo_json, ensure_ascii=False, indent=4)
 
-# datos estructurados
-print("\n Datos estructurados: ")
-print(tarea_estructurada)
+print("Tarea estructurada guardada en 'tarea_estructurada.json'")
 

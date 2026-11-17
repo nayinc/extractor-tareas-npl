@@ -9,7 +9,8 @@ npl = spacy.load("es_core_news_sm")
 tarea_estructurada = {
     "acciones": [],
     "dias": [],
-    "horas": []
+    "horas": [],
+    "momentos": []
 }
 
 matcher = Matcher(npl.vocab)
@@ -22,6 +23,10 @@ matcher.add("DIA", [patron_dia])
 # reglas horas
 patron_hora = [{"SHAPE": "dd:dd"}]
 matcher.add("HORA", [patron_hora])
+
+# reglas momentos
+patron_momento = [{"LOWER": {"IN": ["mañana", "tarde", "noche"]}}]
+matcher.add("MOMENTO", [patron_momento])
 
 nota = "El miércoles tengo turno a las 20:30 y el viernes tengo que ir al médico a las 10:00. Además, por la tarde bajaré a comprar comida."
 doc = npl(nota)
@@ -44,7 +49,8 @@ for match_id, start, end in resultados:
         tarea_estructurada["dias"].append(palabra)
     elif etiqueta == "HORA":
         tarea_estructurada["horas"].append(palabra)
-
+    elif etiqueta == "MOMENTO":
+        tarea_estructurada["momentos"].append(palabra)
 
 # extraer archivo JSON
 with open("tarea_estructurada.json", "w", encoding="utf-8") as archivo_json:
